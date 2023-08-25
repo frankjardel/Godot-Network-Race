@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://World/World.gd" type="Script" id=1]
+[ext_resource path="res://World/Ball.gd" type="Script" id=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.164706, 0.164706, 0.164706, 1 )
+metallic = 0.2
+roughness = 0.49
+
+[sub_resource type="SphereMesh" id=2]
+
+[sub_resource type="SphereShape" id=3]
+
+[node name="World" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="CSGBox" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0 )
+use_collision = true
+width = 244.8
+height = 1.2
+depth = 223.0
+material = SubResource( 1 )
+
+[node name="CSGBox" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9, 1.6, 0 )
+
+[node name="CSGBox2" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9, 1.6, 14.3 )
+
+[node name="CSGBox3" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9, 1.6, 33.8 )
+
+[node name="CSGBox4" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 37.5, 1.6, 20.9 )
+
+[node name="CSGBox5" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.4, 1.6, 20.9 )
+
+[node name="CSGBox6" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.4, 1.6, 50.6 )
+
+[node name="CSGBox7" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.4, 1.6, -30.3 )
+
+[node name="CSGBox8" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.599998, 1.6, -30.3 )
+
+[node name="CSGBox9" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32.1, 1.6, -30.3 )
+
+[node name="Spawn1" type="Position3D" parent="."]
+
+[node name="Spawn2" type="Position3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0, 0 )
+
+[node name="Players" type="Node" parent="."]
+
+[node name="RigidBody" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7, 0 )
+script = ExtResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="RigidBody"]
+mesh = SubResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
+shape = SubResource( 3 )
