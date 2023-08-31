@@ -100,12 +100,17 @@ text = "Join"
 [node name="WaitingRoom" parent="." groups=["WaitingRoom"] instance=ExtResource( 2 )]
 visible = true
 
-[node name="Label" parent="WaitingRoom/VBoxContainer" index="0"]
+[node name="Label2" type="Label" parent="WaitingRoom/VBoxContainer" index="0"]
+margin_right = 1024.0
 margin_bottom = 34.0
 
-[node name="CenterContainer" parent="WaitingRoom/VBoxContainer" index="1"]
+[node name="Label" parent="WaitingRoom/VBoxContainer" index="1"]
 margin_top = 38.0
-margin_bottom = 123.0
+margin_bottom = 72.0
+
+[node name="CenterContainer" parent="WaitingRoom/VBoxContainer" index="2"]
+margin_top = 76.0
+margin_bottom = 161.0
 
 [node name="ItemList" parent="WaitingRoom/VBoxContainer/CenterContainer" index="0"]
 margin_bottom = 85.0
