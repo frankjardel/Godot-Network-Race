@@ -17,9 +17,16 @@ var cell_walls = {Vector3(0,0,-spacing): N, Vector3(spacing,0,0): E,
 
 
 func _ready():
-	randomize()
 	clear()
-	make_map()
+	if Network.local_player_id == 1:
+		randomize()
+		make_map_border()
+		make_map()
+		rpc("send_ready")
+
+
+func make_map_border():
+	$Border.resize_border(cell_size.x, width)
 	
 	
 func make_map():
@@ -31,13 +38,22 @@ func make_map():
 func make_blank_map():
 	for x in width:
 		for z in height:
+			var possible_rotations = [0,10,16,22]
+			var building_rotation = possible_rotations[randi() % 4]
 			var building = pick_building()
-			set_cell_item(x, 0, z, building)
+			rpc("place_cell", x, z, building, building_rotation)
 
 
 func pick_building():
-	var possible_buildings = [15,16,17,18]
-	var building = possible_buildings[randi() % possible_buildings.size() -1]
+	var chance_of_skyscraper = 1
+	var skyscraper = 16
+	var possible_buildings = [17,18]
+	var building
+	
+	if (randi() %99) +1 <= chance_of_skyscraper:
+		building = skyscraper
+	else:
+		building = possible_buildings[randi() % possible_buildings.size() -1]
 	
 	return building
 
@@ -78,8 +94,8 @@ func make_maze():
 			var current_walls = min(get_cell_item(current.x, 0, current.z), 15) - cell_walls[dir]
 			var next_walls = min(get_cell_item(next.x, 0, next.z), 15) - cell_walls[-dir]
 			
-			set_cell_item(current.x, 0, current.z, current_walls, 0)
-			set_cell_item(next.x, 0, next.z, next_walls, 0)
+			rpc("place_cell", current.x, current.z, current_walls, 0)
+			rpc("place_cell", next.x, next.z, next_walls, 0)
 			fill_gaps(current, dir)
 			current = next
 			unvisited.erase(current)
@@ -102,7 +118,7 @@ func fill_gaps(current, dir):
 		elif dir.z < 0:
 			tile_type = 10
 			current.z -= 1
-		set_cell_item(current.x, 0, current.z, tile_type, 0)
+		rpc("place_cell", current.x, current.z, tile_type, 0)
 		
 		
 func erase_walls():
@@ -119,6 +135,27 @@ func erase_walls():
 			var neighbour_walls = get_cell_item((cell + neighbour).x, 0,
 												(cell + neighbour).z) - cell_walls[-neighbour]
 			neighbour_walls = clamp(neighbour_walls,0,15)
-			set_cell_item(cell.x, 0, cell.z, walls, 0)
+			rpc("place_cell", cell.x, cell.z, walls, 0)
 			set_cell_item((cell + neighbour).x, 0, (cell + neighbour).z, neighbour_walls, 0)
 			fill_gaps(cell, neighbour)
+			
+			
+sync func place_cell(x,z,cell,cell_rotation):
+	set_cell_item(x,0,z,cell,cell_rotation)
+	
+	
+sync func send_ready():
+	if Network.local_player_id == 1:
+		player_ready()
+	else:
+		rpc_id(1, "player_ready")
+	
+	
+remote func player_ready():
+	Network.ready_players += 1
+	if Network.ready_players == Network.players.size():
+		rpc("send_go")
+	
+	
+sync func send_go():
+	get_tree().call_group("gamestate", "unpause")

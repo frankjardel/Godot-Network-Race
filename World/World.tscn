@@ -1,21 +1,22 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://World/World.gd" type="Script" id=1]
 [ext_resource path="res://World/Ball.gd" type="Script" id=2]
-[ext_resource path="res://Tiles/city.meshlib" type="MeshLibrary" id=3]
+[ext_resource path="res://Tiles/update_city.meshlib" type="MeshLibrary" id=3]
 [ext_resource path="res://World/GridMap.gd" type="Script" id=4]
+[ext_resource path="res://World/Border.tscn" type="PackedScene" id=5]
 
 [sub_resource type="SphereMesh" id=2]
 
 [sub_resource type="SphereShape" id=3]
 
-[node name="World" type="Spatial"]
+[node name="World" type="Spatial" groups=["gamestate"]]
 script = ExtResource( 1 )
 
 [node name="Players" type="Node" parent="."]
 
 [node name="RigidBody" type="RigidBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 44.7, 0 )
 script = ExtResource( 2 )
 
 [node name="MeshInstance" type="MeshInstance" parent="RigidBody"]
@@ -31,3 +32,5 @@ script = ExtResource( 4 )
 __meta__ = {
 "_editor_clip_": 0
 }
+
+[node name="Border" parent="GridMap" instance=ExtResource( 5 )]
